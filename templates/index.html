@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Web Scraping App</title>
+    <link rel="icon" type="image/png" href="/static/images/favicon.ico"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .seo-rank, .weak-coding, .load-time {
+            margin-bottom: 20px;
+        }
+        .source-code {
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .weak-code {
+            background-color: #FFCCCC;
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+        #url, #proxy {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        /* Style for scrape data button */
+        #scrape-button {
+            background-color: #115d15;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        #scrape-button:hover {
+            background-color: #4CAF50 ;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form method="POST" action="/">
+            <label for="url">Enter URL:</label><br>
+            <input type="text" id="url" name="url"><br><br>
+            <label for="proxy">Proxy Server (Optional):</label><br>
+            <input type="text" id="proxy" name="proxy"><br><br>
+            <button type="submit" id="scrape-button">Scrape Data</button>
+        </form>
+        <hr>
+        <h1>Scraped Data:</h1>
+        {% if scraped_data %}
+            <div class="seo-rank">
+                <h2>Page Rank of Website:</h2>
+                <p>{{ scraped_data.seo_rank }}</p>
+            </div>
+            <div class="load-time">
+                <h2>Load Time of Website:</h2>
+                <p>{{ "%.2f" % scraped_data.load_time }} seconds</p>
+            </div>
+            <div class="weak-coding">
+                <h2>Weak Coding Analysis:</h2>
+                <p>Number of weak coding occurrences: {{ scraped_data.weak_coding }}</p>
+                <h3>Weak Lines:</h3>
+                {% if scraped_data.weak_lines %}
+                    <ul>
+                        {% for pattern, line_number, line_content in scraped_data.weak_lines %}
+                            <li class="weak-code">Pattern: {{ pattern }} - Line {{ line_number }}: {{ line_content }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No weak coding patterns found.</p>
+                {% endif %}
+            </div>
+            <div class="source-code">
+                <h2>Page Source Code:</h2>
+                <pre>{{ scraped_data.page_source }}</pre>
+            </div>
+        {% else %}
+            <p>No data scraped yet.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
